@@ -11,7 +11,6 @@ def create_app(config):
     app.config.from_object(config)
 
     db.init_app(app)
-    print(db)
 
     app.register_blueprint(shortener)
 
