@@ -1,6 +1,5 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from app.shortener import shortener
 
 
 db = SQLAlchemy()
@@ -12,6 +11,7 @@ def create_app(config):
 
     db.init_app(app)
 
+    from app.shortener import shortener
     app.register_blueprint(shortener)
 
     return app
