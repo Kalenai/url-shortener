@@ -13,6 +13,7 @@ def create_new_url_link(url):
         if not UrlLink.query.filter_by(url_key=url_key).first():
             new_url_link = UrlLink(url_key, url)
             db.session.add(new_url_link)
+            db.session.commit()
             return url_key
 
 
