@@ -150,6 +150,7 @@ harrier
 havanese
 hawk
 hedgehog
+hen
 heron
 herring
 himalayan

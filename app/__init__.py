@@ -1,11 +1,16 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+from app.wordlistclass import wordlist
+
 
 db = SQLAlchemy()
 
 
 def create_app(config):
+    """
+    Flask application factory to create the app object.
+    """
     app = Flask(__name__)
     app.config.from_object(config)
 
