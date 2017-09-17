@@ -7,10 +7,12 @@ from ..models import UrlLink
 
 
 def create_new_url_link(url_input):
+    """
+    Checks that the URL input is valid, creates a new URL link, storing the pair in the database and returning it.
+    """
     if not url(url_input):
         raise ValueError
     while True:
-        # url_key = str(randrange(0, 9999)) + '-' + str(randrange(0, 9999))
         url_key = choice(wordlist.first_list) + '-' + choice(wordlist.second_list)
         if not UrlLink.query.filter_by(url_key=url_key).first():
             new_url_link = UrlLink(url_key, url_input)
@@ -21,6 +23,9 @@ def create_new_url_link(url_input):
 
 @shortener.route('/')
 def index():
+    """
+    Returns the site index.
+    """
     return str(wordlist.second_list)
 
 
