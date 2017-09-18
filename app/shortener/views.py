@@ -33,6 +33,7 @@ def index():
 def get_shortened_url(url_input):
     """
     Returns a new URL link to redirect to the URL that was passed in.
+    Returns error code 400 if the URL is not valid.
     """
     try:
         url_key = create_new_url_link(url_input)
@@ -40,3 +41,12 @@ def get_shortened_url(url_input):
                        short_url=request.url_root + url_key)
     except ValueError:
         abort(400)
+
+
+@shortener.route('/<url_key_input>')
+def redirect_to_url(url_key_input):
+    """
+    Looks up the URL key passed in and redirects to the original URL.
+    Returns error code 400 if the URL key is not found in the database.
+    """
+    pass
