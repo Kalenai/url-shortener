@@ -28,9 +28,11 @@ def get_url_from_url_key(url_key_input):
     Looks up the URL key passed in and returns the corresponding URL.
     Raises NoResultFound if it finds no URL link.
     """
-    url_link = UrlLink.query.filter_by(url_key=url_key_input).first()
-    if url_link:
-        return url_link.url
+    query = UrlLink.query.filter_by(url_key=url_key_input).first()
+    if query:
+        query.update_last_used()
+        db.session.commit()
+        return query.url
     else:
         raise exc.NoResultFound
 

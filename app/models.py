@@ -17,3 +17,6 @@ class UrlLink(db.Model):
 
     def __repr__(self):
         return '<{url_key}: {url}>'.format(url_key=self.url_key, url=self.url)
+
+    def update_last_used(self):
+        self.last_used = datetime.datetime.utcnow()
