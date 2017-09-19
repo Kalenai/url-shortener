@@ -1,4 +1,4 @@
-import urllib
+from urllib.parse import urlparse
 from datetime import datetime, timedelta
 from flask import request
 from tests.base import BaseTestCase
@@ -30,7 +30,7 @@ class TestApiService(BaseTestCase):
         db.session.commit()
         response = self.client.get("/" + url_key, follow_redirects=False)
         self.assertEqual(response.status_code, 302)
-        self.assertEqual(urllib.parse(response.location).path, url)
+        self.assertEqual(urlparse(response.location).geturl(), url)
 
     def test_should_return_error_404_when_passed_invalid_url_link(self):
         url_key = "ugly-bird"
@@ -38,7 +38,7 @@ class TestApiService(BaseTestCase):
         db.session.add(url_link)
         db.session.commit()
         response = self.client.get("/" + url_key)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 404)
 
     def test_should_initialize_created_date_to_today_when_url_link_is_created(self):
         url_key = "pretty-bird"
