@@ -1,5 +1,5 @@
 from random import choice
-from flask import abort, jsonify, redirect, request
+from flask import abort, jsonify, redirect, render_template, request
 from sqlalchemy.orm import exc
 from validators import url
 from . import shortener
@@ -42,7 +42,7 @@ def index():
     """
     Returns the site index.
     """
-    return str(wordlist.second_list)
+    return render_template('index.html')
 
 
 @shortener.route('/new/<path:url_input>')

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<div class="hero-body">
+  <div class="field container has-text-centered">
+    <h1 class="title">Enter a URL to get started!</h1>
+    <div class="field">
+        <div class="control">
+          <input type="text" class="input is-large" placeholder="e.g. https://github.com/">
+        </div>
+    </div>
+    <div class="field is-grouped is-grouped-centered">
+      <div class="control">
+        <br>
+        <button class="button is-primary is-large">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

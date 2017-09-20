@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Briefly - {% block title %}Home{% endblock %}</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.3/css/bulma.min.css">
+    {% block head %}{% endblock %}
+  </head>
+  <body>
+  <section class="hero is-fullheight is-primary is-bold">
+    {% block header %}
+    <div class="hero-head">
+      <header class="nav">
+        <div class="container">
+          <div class="nav-left">
+            <a href="" class="nav-item">Briefly</a>
+          </div>
+          <div class="nav-right">
+            <a href="" class="nav-item">Home</a>
+            <a href="" class="nav-item">Random</a>
+            <span class="nav-item">
+                <a href="" class="button is-success is-inverted">
+                  <span class="icon"><i class="fa fa-github"></i></span>
+                  <span>GitHub</span>
+                </a>
+            </span>
+          </div>
+        </div>
+      </header>
+    </div>
+    {% endblock %}
+    {% block body %}{% endblock %}
+    {% block foot %}
+    <div class="hero-foot">
+      <div class="container has-text-centered">
+          Made with <span class="icon"><i class="fa fa-paw"></i></span> by Jed Davis
+          <br>
+          Source code licensed under <a href="http://opensource.org/licenses/mit-license.php" class="has-text-weight-bold">MIT</a>
+        </div>
+    </div>
+    {% endblock %}
+  </section>
+  {% block scripts %}{% endblock %}
+  </body>
+</html>
