@@ -1,2 +1,2 @@
 web: gunicorn wsgi:app
-init: create_db.py
+init: python create_db.py
