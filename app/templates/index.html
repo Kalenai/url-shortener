@@ -7,9 +7,9 @@
   <div class="field container has-text-centered">
     <h1 class="title">Enter a URL to get started!</h1>
     <div class="field">
-        <div class="control">
-          <input type="text" class="input" id="url-input-box" placeholder="e.g. https://github.com/">
-        </div>
+      <div class="control">
+        <input type="text" class="input" id="url-input-box" placeholder="e.g. https://github.com/">
+      </div>
     </div>
     <div class="field is-grouped is-grouped-centered">
       <div class="control">
@@ -23,9 +23,14 @@
         Your shortened link is:
       </span>
       <br>
-      <a href="https://placeholder.com/pretty-hen" class="is-size-6 has-text-weight-bold" id="shortened-url-anchor" style="text-decoration: underline">
+      <a href="https://placeholder.com/pretty-hen" target="_blank" class="is-size-6 has-text-weight-bold" id="shortened-url-anchor"
+         style="text-decoration: underline">
         https://placeholder.com/pretty-hen
       </a>
+      <button class="button is-small is-info" id="copy-button" data-clipboard-target="#shortened-url-anchor"
+              style="position: absolute; right: 0.25rem; bottom: 0.25rem;">
+        Copy
+      </button>
     </div>
   </div>
 </div>
@@ -33,55 +38,61 @@
 
 {% block scripts %}
 <script type="text/javascript">
-(function() {
-  var httpRequest;
-  var $notificationBox = document.getElementById('notification');
+  (function () {
+    var clipboard = new Clipboard('#copy-button');
+    var httpRequest;
+    var $notificationBox = document.getElementById('notification');
 
-  document.getElementById('submit-button').addEventListener('click', makeRequest);
-  document.getElementById('delete-notification').addEventListener('click', closeNotification);
+    document.getElementById('submit-button').addEventListener('click', makeRequest);
+    document.getElementById('delete-notification').addEventListener('click', closeNotification);
 
-  function makeRequest() {
-    httpRequest = new XMLHttpRequest();
+    function makeRequest() {
+      httpRequest = new XMLHttpRequest();
 
-    if (!httpRequest) {
-      alert("Unable to reach the server.");
-      return false;
-    }
-
-    var urlInput = document.getElementById('url-input-box').value;
-
-    httpRequest.onreadystatechange = showNotification;
-    httpRequest.open('GET', '/new/' + urlInput);
-    httpRequest.send();
-  }
-
-  function showNotification() {
-    if (httpRequest.readyState === XMLHttpRequest.DONE) {
-      var $notificationBoxSpan = document.getElementById('notification-box-span');
-      var $shortenedUrlAnchor = document.getElementById('shortened-url-anchor');
-
-      if (httpRequest.status === 200) {
-        var $shortenedUrl = JSON.parse(httpRequest.responseText)['short_url'];
-        $notificationBoxSpan.textContent = "Your shortened link is:";
-        $shortenedUrlAnchor.textContent = $shortenedUrl;
-        $shortenedUrlAnchor.href = $shortenedUrl;
-      } else if (httpRequest.status === 400) {
-        $notificationBoxSpan.textContent = "Please enter a valid URL in the box.";
-        $shortenedUrlAnchor.textContent = "";
-        $shortenedUrlAnchor.href = "#";
-      } else {
-        $notificationBoxSpan.textContent = "Uh oh - something went wrong. :(";
-        $shortenedUrlAnchor.textContent = "";
-        $shortenedUrlAnchor.href = "#";
+      if (!httpRequest) {
+        alert("Unable to reach the server.");
+        return false;
       }
 
-      $notificationBox.style.visibility = 'visible';
-    }
-  }
+      var urlInput = document.getElementById('url-input-box').value;
 
-  function closeNotification() {
-    $notificationBox.style.visibility = 'hidden';
-  }
-})();
+      httpRequest.onreadystatechange = showNotification;
+      httpRequest.open('GET', '/new/' + urlInput);
+      httpRequest.send();
+    }
+
+    function showNotification() {
+      if (httpRequest.readyState === XMLHttpRequest.DONE) {
+        var $notificationBoxSpan = document.getElementById('notification-box-span');
+        var $shortenedUrlAnchor = document.getElementById('shortened-url-anchor');
+        var $copyButton = document.getElementById('copy-button');
+
+        if (httpRequest.status === 200) {
+          var $shortenedUrl = JSON.parse(httpRequest.responseText)['short_url'];
+          $notificationBoxSpan.textContent = "Your shortened link is:";
+          $shortenedUrlAnchor.textContent = $shortenedUrl;
+          $shortenedUrlAnchor.href = $shortenedUrl;
+          $copyButton.style.visibility = 'visible';
+        } else if (httpRequest.status === 400) {
+          $notificationBoxSpan.textContent = "Please enter a valid URL in the box.";
+          $shortenedUrlAnchor.textContent = "";
+          $shortenedUrlAnchor.href = "#";
+          $copyButton.style.visibility = 'hidden';
+        } else {
+          $notificationBoxSpan.textContent = "Uh oh - something went wrong. :(";
+          $shortenedUrlAnchor.textContent = "";
+          $shortenedUrlAnchor.href = "#";
+          $copyButton.style.visibility = 'hidden';
+        }
+
+        $notificationBox.style.visibility = 'visible';
+      }
+    }
+
+    function closeNotification() {
+      $notificationBox.style.visibility = 'hidden';
+    }
+  })();
+
 </script>
 {% endblock %}
