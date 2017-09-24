@@ -7,11 +7,6 @@ from .. import db, wordlist
 from ..models import UrlLink
 
 
-@app.before_first_request
-def create_database():
-     db.create_all()
-
-
 @shortener.route('/')
 def index():
     """
