@@ -8,20 +8,24 @@
     <h1 class="title">Enter a URL to get started!</h1>
     <div class="field">
         <div class="control">
-          <input type="text" class="input" placeholder="e.g. https://github.com/">
+          <input type="text" class="input" id="url-input-box" placeholder="e.g. https://github.com/">
         </div>
     </div>
     <div class="field is-grouped is-grouped-centered">
       <div class="control">
         <br>
-        <button class="button is-primary" id="submit-button">Submit</button>
+        <button class="button is-primary" id="submit-button">Get Shortened Link</button>
       </div>
     </div>
     <div class="notification is-info" id="notification" style="visibility: hidden">
       <button class="delete" id="delete-notification"></button>
-      Your shortened link is:
+      <span id="notification-box-span">
+        Your shortened link is:
+      </span>
       <br>
-      <a href="https://placeholder.com/pretty-hen" class="is-size-6 has-text-weight-bold">https://placeholder.com/pretty-hen</a>
+      <a href="https://placeholder.com/pretty-hen" class="is-size-6 has-text-weight-bold" id="shortened-url-anchor" style="text-decoration: underline">
+        https://placeholder.com/pretty-hen
+      </a>
     </div>
   </div>
 </div>
@@ -44,19 +48,31 @@
       return false;
     }
 
+    var urlInput = document.getElementById('url-input-box').value;
+
     httpRequest.onreadystatechange = showNotification;
-    httpRequest.open('GET', '/new/hello');
+    httpRequest.open('GET', '/new/' + urlInput);
     httpRequest.send();
   }
 
   function showNotification() {
     if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      var $notificationBoxSpan = document.getElementById('notification-box-span');
+      var $shortenedUrlAnchor = document.getElementById('shortened-url-anchor');
+
       if (httpRequest.status === 200) {
-        alert(httpRequest.responseText);
+        var $shortenedUrl = JSON.parse(httpRequest.responseText)['short_url'];
+        $notificationBoxSpan.textContent = "Your shortened link is:";
+        $shortenedUrlAnchor.textContent = $shortenedUrl;
+        $shortenedUrlAnchor.href = $shortenedUrl;
       } else if (httpRequest.status === 400) {
-        alert(httpRequest.responseText);
+        $notificationBoxSpan.textContent = "Please enter a valid URL in the box.";
+        $shortenedUrlAnchor.textContent = "";
+        $shortenedUrlAnchor.href = "#";
       } else {
-        alert('There was a problem with the request.');
+        $notificationBoxSpan.textContent = "Uh oh - something went wrong. :(";
+        $shortenedUrlAnchor.textContent = "";
+        $shortenedUrlAnchor.href = "#";
       }
 
       $notificationBox.style.visibility = 'visible';
