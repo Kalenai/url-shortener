@@ -8,15 +8,64 @@
     <h1 class="title">Enter a URL to get started!</h1>
     <div class="field">
         <div class="control">
-          <input type="text" class="input is-large" placeholder="e.g. https://github.com/">
+          <input type="text" class="input" placeholder="e.g. https://github.com/">
         </div>
     </div>
     <div class="field is-grouped is-grouped-centered">
       <div class="control">
         <br>
-        <button class="button is-primary is-large">Submit</button>
+        <button class="button is-primary" id="submit-button">Submit</button>
       </div>
+    </div>
+    <div class="notification is-info" id="notification" style="visibility: hidden">
+      <button class="delete" id="delete-notification"></button>
+      Your shortened link is:
+      <br>
+      <a href="https://placeholder.com/pretty-hen" class="is-size-6 has-text-weight-bold">https://placeholder.com/pretty-hen</a>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript">
+(function() {
+  var httpRequest;
+  var $notificationBox = document.getElementById('notification');
+
+  document.getElementById('submit-button').addEventListener('click', makeRequest);
+  document.getElementById('delete-notification').addEventListener('click', closeNotification);
+
+  function makeRequest() {
+    httpRequest = new XMLHttpRequest();
+
+    if (!httpRequest) {
+      alert("Unable to reach the server.");
+      return false;
+    }
+
+    httpRequest.onreadystatechange = showNotification;
+    httpRequest.open('GET', '/new/hello');
+    httpRequest.send();
+  }
+
+  function showNotification() {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
+      if (httpRequest.status === 200) {
+        alert(httpRequest.responseText);
+      } else if (httpRequest.status === 400) {
+        alert(httpRequest.responseText);
+      } else {
+        alert('There was a problem with the request.');
+      }
+
+      $notificationBox.style.visibility = 'visible';
+    }
+  }
+
+  function closeNotification() {
+    $notificationBox.style.visibility = 'hidden';
+  }
+})();
+</script>
 {% endblock %}
